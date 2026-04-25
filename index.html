@@ -43,12 +43,24 @@
 
       dishes.forEach(dish => {
         const li = document.createElement('li');
-        const a = document.createElement('a');
 
-        a.href = '/' + toSlug(dish);
+        const a = document.createElement('a');
+        a.href = '/' + dish.toLowerCase().replace(/\s+/g, '-');
         a.textContent = dish;
 
+        const btn = document.createElement('button');
+        btn.textContent = 'Delete';
+
+        btn.onclick = async () => {
+          await fetch(`${API_URL}/dishes/${dish._id}`, {
+            method: 'DELETE'
+          });
+
+          render();
+        };
+
         li.appendChild(a);
+        li.appendChild(btn);
         list.appendChild(li);
       });
     }
