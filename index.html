@@ -14,7 +14,7 @@
 
     <div class="input-group">
       <input id="dishInput" placeholder="Add a dish..." onkeydown="handleKey(event)" />
-      <button onclick="addDish()">Add</button>
+      <button id="submit-button" onclick="addDish()">Add</button>
     </div>
   </div>
 
@@ -49,7 +49,8 @@
         a.textContent = dish.name;
 
         const btn = document.createElement('button');
-        btn.textContent = 'Delete';
+        btn.textContent = '–';
+        btn.className = 'delete-btn';
 
         btn.onclick = async () => {
           await fetch(`${API_URL}/dishes/${dish._id}`, {
