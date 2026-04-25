@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dish List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Dish List</h2>
+
+    <ul id="dishList"></ul>
+
+    <div class="input-group">
+      <input id="dishInput" placeholder="Add a dish..." onkeydown="handleKey(event)" />
+      <button onclick="addDish()">Add</button>
+    </div>
+  </div>
+
+  <script>
+    // 🔗 Replace with your actual Render backend URL
+    const API_URL = 'https://dish-api.onrender.com';
+
+    function toSlug(text) {
+      return text
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9\-]/g, '');
+    }
+
+    async function loadDishes() {
+      const res = await fetch(`${API_URL}/dishes`);
+      return await res.json();
+    }
+
+    async function render() {
+      const list = document.getElementById('dishList');
+      list.innerHTML = '';
+
+      const dishes = await loadDishes();
+
+      dishes.forEach(dish => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+
+        a.href = '/' + toSlug(dish);
+        a.textContent = dish;
+
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    }
+
+    async function addDish() {
+      const input = document.getElementById('dishInput');
+      const value = input.value.trim();
+      if (!value) return;
+
+      await fetch(`${API_URL}/dishes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dish: value })
+      });
+
+      input.value = '';
+      render();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter') addDish();
+    }
+
+    // Initial load
+    render();
+  </script>
+</body>
+</html>
