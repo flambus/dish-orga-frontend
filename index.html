@@ -45,8 +45,8 @@
         const li = document.createElement('li');
 
         const a = document.createElement('a');
-        a.href = '/' + dish.toLowerCase().replace(/\s+/g, '-');
-        a.textContent = dish;
+        a.href = '/' + dish.name.toLowerCase().replace(/\s+/g, '-');
+        a.textContent = dish.name;
 
         const btn = document.createElement('button');
         btn.textContent = 'Delete';
